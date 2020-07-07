@@ -1,0 +1,12 @@
+@media only screen and (max-width: 768px) {
+    .wrapper,.centred-form{
+        width: 90%;
+    }
+    .scroll-table{
+        width: 100%;
+        overflow: auto;
+    }
+    .event-table,.basic-table{
+        min-width: 800px;
+    }
+}

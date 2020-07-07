@@ -7,7 +7,186 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@import "https://fonts.googleapis.com/css?family=Roboto";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
+
+body {
+  font-family: Roboto;
+  font-size: 16px;
+  color: #212121;
+}
+
+.centred-form {
+  width: 400px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+.centred-form h1{
+  color: #000;
+  text-align: center;
+  margin-top: 0;
+  font-size: 24px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+
+.field{
+  width: 100%;
+  position: relative;
+}
+.field input{
+  padding: 10px 10px 10px 0;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+.field span{
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  font-size: 12px;
+  color: #ff0000;
+}
+.centred-form button{
+  padding: 10px 25px;
+  border: none;
+  border-radius: 3px;
+  margin: 20px 10px 0 0;
+  cursor: pointer;
+  color: #fff;
+  outline: none;
+}
+.centred-form button.submit{
+  background: green;
+}
+.centred-form button.reset{
+  background: #a29d9d;
+}
+/* event table css start here */
+.wrapper{
+  width: 800px;
+  margin: auto;
+  text-align: center;
+}
+.wrapper select{
+  float: right;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  padding: 10px 10px 10px 10px;
+  cursor: pointer;
+  outline: none;
+}
+.wrapper h1{
+  font-size: 24px;
+}
+.event-table{
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.apply-filter{
+  padding-right: 10px !important;
+}
+.basic-table{
+    margin: auto;
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
+    border-collapse: collapse;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+thead{
+  background: #e2e2e2;
+}
+tbody{
+  color: #000;
+}
+th,td{
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+.material {
+  position: relative;
+  padding: 0;
+  border: none;
+  overflow: visible;
+  padding-bottom: 30px;
+}
+.material input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 15px 0px 8px;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid #DDD;
+  font-size: 120%;
+  outline: none;
+  cursor: text;
+  font-size: 14px;
+  color: #777;
+}
+.material input::-webkit-input-placeholder {
+  -webkit-transition: color 300ms ease;
+  transition: color 300ms ease;
+}
+.material input:not(:focus)::-webkit-input-placeholder {
+  color: transparent;
+}
+.material hr {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 2px;
+  border: none;
+  background: #607D8B;
+  font-size: 1px;
+  will-change: transform, visibility;
+  transition: all 200ms ease-out;
+  transform: scaleX(0);
+  visibility: hidden;
+  z-index: 10;
+}
+.material input:focus ~ hr {
+  -webkit-transform: scaleX(1);
+          transform: scaleX(1);
+  visibility: visible;
+}
+.material label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  font-size: 120%;
+  color: #607D8B;
+  transform-origin: 0 -150%;
+  transition: transform 300ms ease;
+  pointer-events: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+.material input:focus ~ label,
+.material input:valid ~ label {
+  -webkit-transform: scale(0.7);
+          transform: scale(0.7);
+}
+/* event table css end here */
