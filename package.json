@@ -2,7 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://AmarRajput.github.io/my-app",
+  "homepage": "https://app.herokuapp.com/",
   "engines": {
     "npm": "5.7.1",
     "node": "9.5.0"
