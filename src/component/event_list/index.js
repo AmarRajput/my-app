@@ -63,105 +63,107 @@ class EventList extends React.Component {
           <option value="Discount">Discount</option>
           <option value="No discount">No discount</option>
          </select>
-        <ReactTable
-          filtered={this.state.filtered}
-          ref={r => this.reactTable = r}
-          onFilteredChange={this.onFilteredChange.bind(this)}
-          data={eventdata}
-          filterable
-          defaultFilterMethod={(filter, row) =>
-            String(row[filter.id]) === filter.value}
-          columns={[
-          {
-              columns: [
-                {
-                  Header: "Event Name",
-                  accessor: "name",
-                  id: "name",
-                  Cell: ({value}) => <AllUpperCase value={value} />,
-                },
-                {
-                  Header: "Description",
-                  id: "description",
-                  accessor: d => d.description,
-                  Cell: ({value}) => <AllUpperCase value={value} />,
-                  filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["description"] }),
-                },
-                {
-                  Header: "Venue",
-                  accessor: "venue",
-                  id: "venue",
-                  Cell: ({value}) => <AllUpperCase value={value} />,
-                  filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["venue"] }),
-                    filterAll: true
-                },
-                {
-                  Header: "Price",
-                  accessor: "price",
-                  id: "price",
-                  Cell: ({value}) => <AllUpperCase value={value} />,
-                  filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["price"] }),
-                    filterAll: true
-                },
-                {
-                  Header: "Discount",
-                  accessor: "discount",
-                  id: "discount",
-                  Cell: ({ value }) => (parseInt(value) > 0 ? value : "No Discount"),
-                  filterMethod: (filter, row) => {
-                    if (filter.value.indexOf("Free") > -1) {
-                      return true;
-                    }
-                    if (filter.value.indexOf("Discount") > -1) {
-                      return row[filter.id] > 0;
-                    }
-                    if(!filter.value.indexOf("Discount") > -1){
-                      var a = parseInt(row[filter.id]);
-                       if(isNaN(row[filter.id]) || row[filter.id] == ""){
-                        return typeof row[filter.id] === "string" 
-                      }
-                    }
+         <div className="scroll-table">
+          <ReactTable
+            filtered={this.state.filtered}
+            ref={r => this.reactTable = r}
+            onFilteredChange={this.onFilteredChange.bind(this)}
+            data={eventdata}
+            filterable
+            defaultFilterMethod={(filter, row) =>
+              String(row[filter.id]) === filter.value}
+            columns={[
+            {
+                columns: [
+                  {
+                    Header: "Event Name",
+                    accessor: "name",
+                    id: "name",
+                    Cell: ({value}) => <AllUpperCase value={value} />,
                   },
-                }
-              ]
-            },
-           {
-             id: 'all',
-              width: 0,
-              resizable: false,
-              sortable: false,
-              Filter: () => { },
-              getProps: () => {
-                return {
-                  // style: { padding: "0px"}
-                }
+                  {
+                    Header: "Description",
+                    id: "description",
+                    accessor: d => d.description,
+                    Cell: ({value}) => <AllUpperCase value={value} />,
+                    filterMethod: (filter, rows) =>
+                      matchSorter(rows, filter.value, { keys: ["description"] }),
+                  },
+                  {
+                    Header: "Venue",
+                    accessor: "venue",
+                    id: "venue",
+                    Cell: ({value}) => <AllUpperCase value={value} />,
+                    filterMethod: (filter, rows) =>
+                      matchSorter(rows, filter.value, { keys: ["venue"] }),
+                      filterAll: true
+                  },
+                  {
+                    Header: "Price",
+                    accessor: "price",
+                    id: "price",
+                    Cell: ({value}) => <AllUpperCase value={value} />,
+                    filterMethod: (filter, rows) =>
+                      matchSorter(rows, filter.value, { keys: ["price"] }),
+                      filterAll: true
+                  },
+                  {
+                    Header: "Discount",
+                    accessor: "discount",
+                    id: "discount",
+                    Cell: ({ value }) => (parseInt(value) > 0 ? value : "No Discount"),
+                    filterMethod: (filter, row) => {
+                      if (filter.value.indexOf("Free") > -1) {
+                        return true;
+                      }
+                      if (filter.value.indexOf("Discount") > -1) {
+                        return row[filter.id] > 0;
+                      }
+                      if(!filter.value.indexOf("Discount") > -1){
+                        var a = parseInt(row[filter.id]);
+                        if(isNaN(row[filter.id]) || row[filter.id] == ""){
+                          return typeof row[filter.id] === "string" 
+                        }
+                      }
+                    },
+                  }
+                ]
               },
-              filterMethod: (filter, rows) => {
-                const result = matchSorter(rows, filter.value, {
-                  keys: [
-                    "name",
-                    "description",
-                    "venue",
-                    "price",
-                    "discount"
-                  ], threshold: matchSorter.rankings.WORD_STARTS_WITH
-                });
-                return result;
+            {
+              id: 'all',
+                width: 0,
+                resizable: false,
+                sortable: false,
+                Filter: () => { },
+                getProps: () => {
+                  return {
+                    // style: { padding: "0px"}
+                  }
+                },
+                filterMethod: (filter, rows) => {
+                  const result = matchSorter(rows, filter.value, {
+                    keys: [
+                      "name",
+                      "description",
+                      "venue",
+                      "price",
+                      "discount"
+                    ], threshold: matchSorter.rankings.WORD_STARTS_WITH
+                  });
+                  return result;
+                },
+                filterAll: true,
               },
-              filterAll: true,
-            },
 
-          ]}
-          defaultPageSize={10}
-          className="-striped -highlight"
+            ]}
+            defaultPageSize={10}
+            className="-striped -highlight"
 
-          getTrProps={(state,rowInfo)=>{ 
-            return {} 
-          }}
-        />
+            getTrProps={(state,rowInfo)=>{ 
+              return {} 
+            }}
+          />
+        </div>
         <br />
       </div>
     );

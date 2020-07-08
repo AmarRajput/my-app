@@ -6,7 +6,10 @@
         width: 100%;
         overflow: auto;
     }
-    .event-table,.basic-table{
+    .basic-table,.ReactTable{
         min-width: 800px;
+    }
+    .event-table{
+        padding-right: 5px;
     }
 }
