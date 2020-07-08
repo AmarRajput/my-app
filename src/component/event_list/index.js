@@ -1,96 +1,180 @@
-import React from 'react';
-import TableFilter from 'react-table-filter';
-import "react-table-filter/lib/styles.css";
+import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import matchSorter from 'match-sorter'
+import {getEventData} from '../../redux/actions'
 
-let EVENTDATA;
+// Import React Table
+import ReactTable from 'react-table-6';
+import 'react-table-6/react-table.css';
 
-export default class EventList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-           eventList: [],
-           eventListData: [],
-        };
-        this.filterUpdated = this.filterUpdated.bind(this);
-        EVENTDATA = [];
+
+const AllUpperCase = props => <span>{props.value.toUpperCase()}</span>;
+class EventList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      filtered: [],
+      filterAll: [],
+    };
+    this.filterAll = this.filterAll.bind(this);
+    props.getEventData();
+  }
+  
+
+  onFilteredChange(filtered) {
+    // extra check for the "filterAll"
+    if (filtered.length > 1 && this.state.filterAll.length) {
+      // NOTE: this removes any FILTER ALL filter
+      const filterAll = '';
+      this.setState({ filtered: filtered.filter((item) => item.id != 'all'), filterAll })
     }
+    else
+      this.setState({ filtered });
+  }
 
+  filterAll(e) {
+   const { value } = e.target;
+   let filterAll = value;
+   let filtered = [{ id: 'discount', value: filterAll }];
     
-
-    filterUpdated = (newData, filtersObject) => {
-        this.setState({
-			"upddatedData": newData
-		});
+    if(e.target.value == "all"){
+      filterAll = ""
+      filtered = [{ id: 'all', value: filterAll }];
     }
     
-    render() {
-        EVENTDATA = localStorage.getItem("Data") ? JSON.parse(localStorage.getItem("Data")) : [];
+    if(e.target.value == "free"){
+      filtered = [{ id: 'price', value: filterAll }];
+    }
+  // NOTE: this completely clears any COLUMN filters
+    this.setState({ filterAll, filtered });
+    
+  }
+  
+  render() {
+    const { eventdata } = this.props;
+    return (
+      <div className="event-table">
+        Filter All: 
+        <select onChange={this.filterAll}>
+          <option value="all">All</option>
+          <option value="free">Free</option>
+          <option value="Discount">Discount</option>
+          <option value="No discount">No discount</option>
+         </select>
+        <ReactTable
+          filtered={this.state.filtered}
+          ref={r => this.reactTable = r}
+          onFilteredChange={this.onFilteredChange.bind(this)}
+          data={eventdata}
+          filterable
+          defaultFilterMethod={(filter, row) =>
+            String(row[filter.id]) === filter.value}
+          columns={[
+          {
+              columns: [
+                {
+                  Header: "Event Name",
+                  accessor: "name",
+                  id: "name",
+                  Cell: ({value}) => <AllUpperCase value={value} />,
+                },
+                {
+                  Header: "Description",
+                  id: "description",
+                  accessor: d => d.description,
+                  Cell: ({value}) => <AllUpperCase value={value} />,
+                  filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, { keys: ["description"] }),
+                },
+                {
+                  Header: "Venue",
+                  accessor: "venue",
+                  id: "venue",
+                  Cell: ({value}) => <AllUpperCase value={value} />,
+                  filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, { keys: ["venue"] }),
+                    filterAll: true
+                },
+                {
+                  Header: "Price",
+                  accessor: "price",
+                  id: "price",
+                  Cell: ({value}) => <AllUpperCase value={value} />,
+                  filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, { keys: ["price"] }),
+                    filterAll: true
+                },
+                {
+                  Header: "Discount",
+                  accessor: "discount",
+                  id: "discount",
+                  Cell: ({ value }) => (parseInt(value) > 0 ? value : "No Discount"),
+                  filterMethod: (filter, row) => {
+                    if (filter.value.indexOf("Free") > -1) {
+                      return true;
+                    }
+                    if (filter.value.indexOf("Discount") > -1) {
+                      return row[filter.id] > 0;
+                    }
+                    if(!filter.value.indexOf("Discount") > -1){
+                      var a = parseInt(row[filter.id]);
+                       if(isNaN(row[filter.id]) || row[filter.id] == ""){
+                        return typeof row[filter.id] === "string" 
+                      }
+                    }
+                  },
+                }
+              ]
+            },
+           {
+             id: 'all',
+              width: 0,
+              resizable: false,
+              sortable: false,
+              Filter: () => { },
+              getProps: () => {
+                return {
+                  // style: { padding: "0px"}
+                }
+              },
+              filterMethod: (filter, rows) => {
+                const result = matchSorter(rows, filter.value, {
+                  keys: [
+                    "name",
+                    "description",
+                    "venue",
+                    "price",
+                    "discount"
+                  ], threshold: matchSorter.rankings.WORD_STARTS_WITH
+                });
+                return result;
+              },
+              filterAll: true,
+            },
 
-        const upddatedData = this.state.upddatedData;
-        if(upddatedData){
-            EVENTDATA = upddatedData
-        }
-        const elementsHtml = EVENTDATA.map((item, index) => {
-          return (
-            <tr key={'row_'+index}>
-              <td className="cell">
-                { item.name }
-              </td>
-              <td className="cell" style={{width: "200px"}}>
-                { item.description }
-              </td>
-              <td className="cell">
-                { item.venue }
-              </td>
-              <td className="cell">
-                { item.price }
-              </td>
-              <td className="cell">
-                { item.discount }
-              </td>
-            </tr>
-          );
-        });
-        return (
-          (EVENTDATA && EVENTDATA.length > 0 ?
-          <div>
-           <div className="examples">
-              <div className="wrapper">
-                  <h1>Event Listing</h1>
-                  <div className="scroll-table">
-                    <table className="basic-table">
-                        <thead>
-                            <TableFilter
-                            rows={EVENTDATA}
-                            onFilterUpdate={this.filterUpdated}>
-                            <th key="name" filterkey="name" className="cell" casesensitive={'true'} showsearch={'true'} >
-                                Name
-                            </th>
-                            <th key="description" filterkey="description" className="cell">
-                                Description
-                            </th>
-                            <th key="venue" filterkey="venue" className="cell" alignleft={'true'}>
-                                Venue
-                            </th>
-                            <th key="price" filterkey="price" className="cell" alignleft={'true'}>
-                                Price
-                            </th>
-                            <th key="discount" filterkey="discount" className="cell" alignleft={'true'}>
-                                Discount
-                            </th>
-                            </TableFilter>
-                        </thead>
-                        <tbody>
-                            { elementsHtml }
-                        </tbody>
-                    </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          :
-          ""
-            )
-        );
-      }
+          ]}
+          defaultPageSize={10}
+          className="-striped -highlight"
+
+          getTrProps={(state,rowInfo)=>{ 
+            return {} 
+          }}
+        />
+        <br />
+      </div>
+    );
+  }
 }
+
+
+const mapStateToProps = state => {
+  return {
+    eventdata: state.commonReducer.eventdata
+  }
+}
+const mapDispatchToProps = (dispatch) => bindActionCreators({getEventData}, dispatch);
+
+EventList = connect(mapStateToProps, mapDispatchToProps)(EventList)
+export default EventList;

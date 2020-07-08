@@ -32,7 +32,6 @@ body {
   margin-top: 0;
   font-size: 24px;
   margin-bottom: 40px;
-  margin-top: 40px;
 }
 
 .field{
@@ -90,8 +89,6 @@ body {
   width: 100%;
   margin: auto;
   text-align: center;
-  margin-top: 30px;
-  margin-bottom: 30px;
   border-collapse: collapse;
   font-size: 14px;
   line-height: 1.5;
@@ -190,3 +187,26 @@ th,td{
           transform: scale(0.7);
 }
 /* event table css end here */
+.rt-thead.-headerGroups,.ReactTable .rt-thead .rt-th:last-child,.ReactTable .rt-thead.-filters{
+  display: none !important;
+}
+.ReactTable .rt-tbody .rt-td{
+  text-align: center;
+}
+.event-table{
+  padding: 0 20px 20px;
+}
+.event-table select{
+  padding: 10px;
+  margin: 20px 10px;
+  cursor: pointer;
+  outline: none;
+}
+.ReactTable .rt-table{
+  overflow: inherit !important;
+}
+.ReactTable .rt-thead .rt-th, .ReactTable .rt-thead .rt-td{
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 15px !important;
+}

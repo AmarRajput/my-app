@@ -2,14 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './responsive.css';
-import EventList from './component/event_list/index';
-import EventForm from './component/event_form/index';
+import App from '../src/App'
+
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <EventList />
-    <EventForm />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('App')
 );
