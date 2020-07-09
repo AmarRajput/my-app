@@ -55,6 +55,7 @@ class EventList extends React.Component {
   render() {
     const { eventdata } = this.props;
     return (
+      (eventdata && eventdata.length > 0 ?
       <div className="event-table">
         Filter All: 
         <select onChange={this.filterAll}>
@@ -166,6 +167,9 @@ class EventList extends React.Component {
         </div>
         <br />
       </div>
+      :
+      ""
+      )
     );
   }
 }
